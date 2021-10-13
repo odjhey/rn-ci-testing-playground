@@ -1,0 +1,20 @@
+name: Package Builds
+
+on: [workflow_dispatch]
+
+jobs:
+  build-android-debug:
+    runs-on: ubuntu-latest
+    container: reactnativecommunity/react-native-android
+    steps:
+      - uses: actions/checkout@v2
+      - name: Envinfo
+        run: npx envinfo
+      - name: Build application
+        run: yarn install && cd android && chmod +x gradlew && ./gradlew assembleDebug
+      - name: Save Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: debug-apk
+          path: |
+            android/app/build/outputs/apk/debug/app-debug.apk
